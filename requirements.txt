@@ -1,4 +1,7 @@
 streamlit
 python-dotenv
+langchain>=1.0.0
 langchain-groq
 groq
+scipy
+sounddevice
