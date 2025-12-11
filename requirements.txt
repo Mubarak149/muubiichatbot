@@ -1,7 +1,5 @@
-streamlit
-python-dotenv
-langchain>=1.0.0
+langchain==1.1.3
 langchain-groq
+streamlit>=1.25
 groq
-scipy
-sounddevice
+python-dotenv

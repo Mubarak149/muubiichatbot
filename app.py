@@ -4,7 +4,7 @@ import utills
 from dotenv import load_dotenv
 import streamlit as st
 from langchain_groq import ChatGroq
-from langchain.schema import HumanMessage, AIMessage
+from langchain.messages import HumanMessage, AIMessage, SystemMessage
 from groq import Groq  # for Whisper speech recognition
 
 # Load API key
