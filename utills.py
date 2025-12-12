@@ -23,3 +23,13 @@ def log_interaction(role, message):
     # Save into a log file
     with open("chat_logs.jsonl", "a") as f:
         f.write(json.dumps(log_data) + "\n")
+
+
+def log_error(message):
+    error_data = {
+        "timestamp": datetime.now().isoformat(),
+        "error": message
+    }
+
+    with open("error_logs.jsonl", "a") as f:
+        f.write(json.dumps(error_data) + "\n")
