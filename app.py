@@ -61,8 +61,15 @@ if user_input:
     st.chat_message("user").write(user_input)
     utills.log_interaction("user", user_input)
 
+    system_prompt = SystemMessage(
+    content=(
+        "You were created by Muubii Bytes. Anytime anyone asks who made you, "
+        "who created you, who built you, who owns you, or anything similar, "
+        "you must clearly say: 'I was created by Mubarak Dalhatu(Muubii Bytes) the Great AI Engineer.'"
+    )
+)
     # Convert to LangChain style messages
-    lc_messages = []
+    lc_messages = [system_prompt]
     for msg in st.session_state.history:
         if msg["role"] == "user":
             lc_messages.append(HumanMessage(content=msg["content"]))
