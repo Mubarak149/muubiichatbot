@@ -59,6 +59,7 @@ if user_input:
     # Add user message
     st.session_state.history.append({"role": "user", "content": user_input})
     st.chat_message("user").write(user_input)
+    utills.log_interaction("user", user_input)
 
     # Convert to LangChain style messages
     lc_messages = []
@@ -76,6 +77,7 @@ if user_input:
     # Save + display reply
     st.session_state.history.append({"role": "assistant", "content": ai_response})
     st.chat_message("assistant").write(clean_response)
+    utills.log_interaction("assistant", clean_response)
 
     # ------- GROQ TTS -------
     for part in utills.chunk_text(clean_response, max_chars=1000):
