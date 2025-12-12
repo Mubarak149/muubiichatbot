@@ -70,7 +70,15 @@ if user_input:
             lc_messages.append(AIMessage(content=msg["content"]))
 
     # Generate LLM response
-    ai_response = llm.invoke(lc_messages).content
+    try:
+        ai_response = llm.invoke(lc_messages).content
+    except Exception as e:
+        error_msg = f"LLM Error: {str(e)}"
+        utills.log_error(error_msg)
+        clean_response = "⚠️ Something went wrong while generating a response."
+        st.chat_message("assistant").write(clean_response)
+        st.session_state.history.append({"role": "assistant", "content": clean_response})
+
     # Clean AI response
     clean_response = re.sub(r"<think>.*?</think>", "", ai_response, flags=re.DOTALL).strip()
 
@@ -81,16 +89,24 @@ if user_input:
 
     # ------- GROQ TTS -------
     for part in utills.chunk_text(clean_response, max_chars=1000):
-        speech_response = groq_client.audio.speech.create(
-            model="playai-tts",
-            voice="Fritz-PlayAI",
-            input=part,
-            response_format="wav"
-        )
-        
-        import tempfile
-        with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
-            speech_response.write_to_file(tmp.name)
-            st.audio(tmp.name, format="audio/wav")
+        try:
+            speech_response = groq_client.audio.speech.create(
+                model="playai-tts",
+                voice="Fritz-PlayAI",
+                input=part,
+                response_format="wav"
+            )
+
+            import tempfile
+            with tempfile.NamedTemporaryFile(delete=False, suffix=".wav") as tmp:
+                speech_response.write_to_file(tmp.name)
+                st.audio(tmp.name, format="audio/wav")
+
+        except Exception as e:
+            error_msg = f"TTS Error: {str(e)}"
+            utills.log_error(error_msg)
+            st.warning("⚠️ Voice output disabled temporarily (rate limit or error).")
+            break
+
 
 
